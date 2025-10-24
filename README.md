@@ -22,10 +22,10 @@ The **Resume Generator** is a modern web application that helps users create cle
 
 ## 🛠️ Tech Stack
 
-| Frontend | Backend | Styling | Others                   |
-| -------- | ------- | ------- | ------------------------ |
-| HTML     | Python  | CSS     | Flask / Jinja2 (if used) |
-
+| Frontend | Backend | Styling   | Others                   |
+| -------- | ------- | --------- | ------------------------ |
+| HTML     | Python  | CSS       | Flask / Jinja2 (if used) |
+|          | Java    | Bootstrap | Flask / Jinja2 (if used) |
 ---
 
 ## 📦 Installation & Setup
