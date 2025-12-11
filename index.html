@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GitHub Resume Generator</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" rel="stylesheet">
+
+
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet">
+
+
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      overflow-x: hidden;
+    }
+
+    .container-main {
+      border: 1px solid #474747;
+      border-radius: 0.5rem;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      padding: 2rem;
+    }
+
+    .title {
+      color: #0d6efd;
+    }
+
+    .form-control:focus {
+      box-shadow: 0 0 0 0.25rem rgba(13,110,253,0.25);
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      background-color: #0d6efd;
+      color: white;
+      padding: 0.25rem 0.5rem;
+      border-radius: 1rem;
+      margin: 0.25rem;
+      font-size: 0.875rem;
+      transition: background-color 0.3s ease;
+    }
+
+    .tag:hover {
+      background-color: #0a58ca;
+    }
+
+    .tag button {
+      margin-left: 0.25rem;
+      background: none;
+      border: none;
+      color: white;
+      cursor: pointer;
+    }
+
+    #skillsContainer {
+      border: 1px solid #474747;
+      color:white;
+      border-radius: 0.375rem;
+      padding: 0.5rem;
+      min-height: 2.5rem;
+      display: flex;
+      flex-wrap: wrap;
+      cursor: text;
+    }
+
+    .resume-output {
+      background-color: #f8f9fa;
+      border: 1px solid #ced4da;
+      border-radius: 0.375rem;
+      padding: 1rem;
+      height: 70vh;
+      overflow-y: auto;
+      transition: transform 0.3s ease;
+    }
+
+    .resume-output:hover {
+      transform: scale(1.01);
+    }
+
+    .resume-output pre {
+      white-space: pre-wrap;
+      word-wrap: break-word;
+    }
+
+    .btn-generate {
+      transition: transform 0.3s ease;
+    }
+
+    .btn-generate:hover {
+      transform: scale(1.05);
+    }
+
+    .animate-fadeIn {
+      animation: fadeIn 1s ease-in-out;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .resume-output::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    .resume-output::-webkit-scrollbar-thumb {
+      background-color: #adb5bd;
+      border-radius: 10px;
+    }
+  </style>
+</head>
+<body class="d-flex align-items-center justify-content-center min-vh-100 p-3">
+
+  <div class="container container-main animate__animated animate__fadeIn">
+    <div class="row">
+
+      <div class="col-lg-6 mb-4 mb-lg-0">
+        <h1 class="title text-center text-lg-start mb-4 fs-2 fw-bold">
+          <i class="fas fa-code me-2"></i> GitHub Resume Generator
+        </h1>
+
+        <form id="resumeForm" class="space-y-3">
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Full Name</label>
+            <input type="text" name="name" class="form-control" placeholder="e.g. John Doe" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Email</label>
+            <input type="email" name="email" class="form-control" placeholder="e.g. john.doe@example.com" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Education</label>
+            <textarea name="education" rows="3" class="form-control" placeholder="e.g. Bachelor of Science in Computer Science, University of Example, 2010-2014"></textarea>
+          </div>
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Experience</label>
+            <textarea name="experience" rows="3" class="form-control" placeholder="e.g. Software Engineer at Tech Corp, 2015-Present: Developed web applications using modern frameworks."></textarea>
+          </div>
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Skills</label>
+            <div id="skillsContainer" onclick="document.getElementById('skillsInput').focus()"></div>
+            <input id="skillsInput" type="text" class="form-control mt-2" placeholder="Type skill and press comma (e.g. JavaScript,)">
+          </div>
+          <div class="d-flex justify-content-center justify-content-lg-start mt-4">
+            <button type="submit" class="btn btn-primary btn-generate px-4 py-2 fw-semibold">
+              <i class="fas fa-wand-magic-sparkles me-2"></i> Generate Resume
+            </button>
+          </div>
+        </form>
+
+      </div>
+
+      <div class="col-lg-6 d-flex flex-column">
+
+        <div id="resumeOutput" class="resume-output mb-3 animate__animated animate__fadeIn">
+          <p class="text-center text-dark-emphasis">Your generated Markdown resume will appear here...</p>
+        </div>
+
+        <div class="d-flex justify-content-center gap-3">
+
+          <button id="copyBtn" class="btn btn-primary px-4 py-2 fw-semibold">
+            <i class="fas fa-copy me-2"></i> Copy Code
+          </button>
+
+          <button id="downloadBtn" class="btn btn-success px-4 py-2 fw-semibold">
+            <i class="fas fa-download me-2"></i> Download .md
+          </button>
+
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+
+
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+  
+  <script>
+
+    const form = document.getElementById('resumeForm');
+    const skillsContainer = document.getElementById('skillsContainer');
+    const skillsInput = document.getElementById('skillsInput');
+    const copyBtn = document.getElementById('copyBtn');
+    const downloadBtn = document.getElementById('downloadBtn');
+    const output = document.getElementById('resumeOutput');
+    let skills = [];
+
+    skillsInput.addEventListener('keyup', (e) => {
+      if (e.key === ',' && skillsInput.value.trim() !== '') {
+        const value = skillsInput.value.replace(',', '').trim();
+        if (value && !skills.includes(value)) {
+          skills.push(value);
+          renderSkills();
+        }
+        skillsInput.value = '';
+      }
+    });
+
+    function renderSkills() {
+      skillsContainer.innerHTML = '';
+      skills.forEach((skill, index) => {
+        const tag = document.createElement('div');
+        tag.className = 'tag';
+        tag.innerHTML = `
+          ${skill}
+          <button type="button" onclick="removeSkill(${index})" aria-label="Remove Skill">
+            <i class="fas fa-times"></i>
+          </button>
+        `;
+        skillsContainer.appendChild(tag);
+      });
+    }
+
+    function removeSkill(index) {
+      skills.splice(index, 1);
+      renderSkills();
+    }
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+
+      const formData = new FormData(form);
+      const name = formData.get('name');
+      const email = formData.get('email');
+      const education = formData.get('education').replace(/\n/g, '\n\n');
+      const experience = formData.get('experience').replace(/\n/g, '\n\n');
+      const skillsList = skills.join(' • ');
+
+      const markdown = //Generate The Readme.md Code Right Here;
+
+      output.innerHTML = `<pre class="bg-light p-3 rounded"><code>${markdown}</code></pre>`;
+      output.classList.add('animate__animated', 'animate__fadeIn');
+    });
+
+    copyBtn.addEventListener('click', () => {
+      const text = output.querySelector('code')?.innerText || '';
+      if (!text) return;
+
+      navigator.clipboard.writeText(text).then(() => {
+        copyBtn.innerHTML = '<i class="fas fa-check me-2"></i> Copied!';
+        setTimeout(() => copyBtn.innerHTML = '<i class="fas fa-copy me-2"></i> Copy Code', 2000);
+      });
+    });
+
+    downloadBtn.addEventListener('click', () => {
+      const text = output.querySelector('code')?.innerText || '';
+      if (!text) return;
+
+      const blob = new Blob([text], { type: 'text/markdown' });
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = 'resume.md';
+      link.click();
+    });
+
+  </script>
+</body>
+</html>
