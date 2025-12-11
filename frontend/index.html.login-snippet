@@ -1,0 +1,48 @@
+<!-- LOGIN SNIPPET - insert this into frontend/index.html and frontend/white_theme.html in an appropriate place -->
+<!-- Add a script tag to include the auth helper: <script type="module" src="./auth.js"></script> -->
+<div id="login-area">
+  <input id="login-username" placeholder="username" />
+  <input id="login-password" placeholder="password" type="password" />
+  <button id="login-btn">Login</button>
+  <button id="logout-btn" style="display:none">Logout</button>
+  <span id="login-status"></span>
+</div>
+
+<script type="module">
+  import { login, logout, getToken } from './auth.js';
+
+  const loginBtn = document.getElementById('login-btn');
+  const logoutBtn = document.getElementById('logout-btn');
+  const status = document.getElementById('login-status');
+
+  function updateUI() {
+    const token = getToken();
+    if (token) {
+      loginBtn.style.display = 'none';
+      logoutBtn.style.display = 'inline-block';
+      status.textContent = 'Logged in';
+    } else {
+      loginBtn.style.display = 'inline-block';
+      logoutBtn.style.display = 'none';
+      status.textContent = 'Not logged in';
+    }
+  }
+
+  loginBtn.addEventListener('click', async () => {
+    const username = document.getElementById('login-username').value;
+    const password = document.getElementById('login-password').value;
+    try {
+      await login(username, password);
+      updateUI();
+    } catch (err) {
+      alert('Login failed: ' + err.message);
+    }
+  });
+
+  logoutBtn.addEventListener('click', () => {
+    logout();
+    updateUI();
+  });
+
+  updateUI();
+</script>

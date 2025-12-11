@@ -1,0 +1,5 @@
+Flask>=2.0
+PyJWT>=2.0
+python-dotenv>=0.19
+werkzeug>=2.0
+flask-cors>=3.0
