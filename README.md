@@ -1,4 +1,4 @@
-# Resume-Generator
+# Resume Generator
 
 ✨ **Professional Resume Generator Web App**
 
